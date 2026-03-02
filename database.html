@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rules & Guidelines — SCP: EQUINOX</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=VT323&display=swap" rel="stylesheet">
+<style>
+
+  :root {
+    --neon-pink: #ff2d78;
+    --neon-cyan: #00f5ff;
+    --neon-purple: #bf00ff;
+    --neon-orange: #ff6b00;
+    --dark-bg: #060612;
+    --grid-color: rgba(0, 245, 255, 0.07);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--dark-bg);
+    color: #e0e0e0;
+    font-family: 'Share Tech Mono', monospace;
+    overflow-x: hidden;
+    cursor: crosshair;
+  }
+
+  
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.15) 2px,
+      rgba(0,0,0,0.15) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  
+  .grid-bg {
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--grid-color) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+    background-size: 60px 60px;
+    perspective: 500px;
+    z-index: 0;
+  }
+
+  .grid-floor {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 50vh;
+    background-image:
+      linear-gradient(rgba(0,245,255,0.12) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,245,255,0.06) 1px, transparent 1px);
+    background-size: 80px 80px;
+    transform: perspective(600px) rotateX(60deg);
+    transform-origin: bottom center;
+    z-index: 0;
+  }
+
+  
+  .glow-orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    z-index: 0;
+    pointer-events: none;
+  }
+  .glow-orb.pink {
+    width: 400px; height: 400px;
+    background: rgba(255,45,120,0.15);
+    top: -100px; left: -100px;
+    animation: drift 8s ease-in-out infinite alternate;
+  }
+  .glow-orb.cyan {
+    width: 500px; height: 500px;
+    background: rgba(0,245,255,0.1);
+    bottom: -150px; right: -150px;
+    animation: drift 10s ease-in-out infinite alternate-reverse;
+  }
+  .glow-orb.purple {
+    width: 300px; height: 300px;
+    background: rgba(191,0,255,0.12);
+    top: 40%; left: 50%;
+    animation: drift 12s ease-in-out infinite alternate;
+  }
+  @keyframes drift {
+    from { transform: translate(0,0) scale(1); }
+    to { transform: translate(30px, 20px) scale(1.1); }
+  }
+
+  
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 48px;
+    border-bottom: 1px solid rgba(0,245,255,0.15);
+    background: rgba(6,6,18,0.8);
+    backdrop-filter: blur(12px);
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  
+  .logo-mark {
+    width: 44px;
+    height: 44px;
+    position: relative;
+    flex-shrink: 0;
+  }
+  .logo-mark svg {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 0 8px var(--neon-cyan)) drop-shadow(0 0 2px var(--neon-cyan));
+    animation: spin-slow 20s linear infinite;
+  }
+  @keyframes spin-slow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  .nav-title {
+    font-family: 'Orbitron', monospace;
+    font-weight: 900;
+    font-size: 0.75rem;
+    letter-spacing: 0.4em;
+    color: var(--neon-cyan);
+    text-shadow: 0 0 12px var(--neon-cyan);
+    line-height: 1.2;
+  }
+  .nav-title span {
+    color: #fff;
+    display: block;
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    color: rgba(255,255,255,0.4);
+    font-weight: 400;
+    margin-top: 2px;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+  }
+  .nav-links a {
+    color: rgba(255,255,255,0.5);
+    text-decoration: none;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    transition: color 0.2s, text-shadow 0.2s;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px; left: 0; right: 0;
+    height: 1px;
+    background: var(--neon-pink);
+    transform: scaleX(0);
+    transition: transform 0.3s;
+    box-shadow: 0 0 8px var(--neon-pink);
+  }
+  .nav-links a:hover { color: var(--neon-cyan); text-shadow: 0 0 10px var(--neon-cyan); }
+  .nav-links a:hover::after { transform: scaleX(1); }
+
+  .nav-btn {
+    background: transparent;
+    border: 1px solid var(--neon-pink);
+    color: var(--neon-pink);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    padding: 8px 20px;
+    cursor: crosshair;
+    text-transform: uppercase;
+    transition: all 0.2s;
+    box-shadow: 0 0 10px rgba(255,45,120,0.3);
+  }
+  .nav-btn:hover {
+    background: var(--neon-pink);
+    color: #000;
+    box-shadow: 0 0 20px rgba(255,45,120,0.6);
+  }
+
+  
+  .hero {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 100px 40px 60px;
+  }
+
+  .hero-eyebrow {
+    font-family: 'VT323', monospace;
+    font-size: 1.1rem;
+    color: var(--neon-orange);
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    text-shadow: 0 0 10px var(--neon-orange);
+    margin-bottom: 28px;
+    animation: blink-text 4s ease infinite;
+  }
+  @keyframes blink-text {
+    0%,90%,100% { opacity: 1; }
+    95% { opacity: 0.3; }
+  }
+
+  
+  .hero-logo {
+    position: relative;
+    margin-bottom: 20px;
+  }
+
+  .hero-scp {
+    font-family: 'Orbitron', monospace;
+    font-weight: 900;
+    font-size: clamp(5rem, 15vw, 12rem);
+    color: transparent;
+    -webkit-text-stroke: 2px var(--neon-cyan);
+    letter-spacing: 0.15em;
+    line-height: 0.9;
+    text-shadow: none;
+    position: relative;
+    animation: flicker 6s ease infinite;
+  }
+  .hero-scp::before {
+    content: 'SCP';
+    position: absolute;
+    inset: 0;
+    color: var(--neon-cyan);
+    opacity: 0.08;
+    filter: blur(12px);
+    -webkit-text-stroke: 0;
+  }
+
+  @keyframes flicker {
+    0%,95%,100% { opacity: 1; }
+    96% { opacity: 0.6; }
+    97% { opacity: 1; }
+    98% { opacity: 0.4; }
+    99% { opacity: 1; }
+  }
+
+  .hero-divider {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 8px 0;
+  }
+  .hero-divider-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--neon-pink), transparent);
+    box-shadow: 0 0 8px var(--neon-pink);
+  }
+  .hero-divider-icon {
+    width: 50px;
+    height: 50px;
+    filter: drop-shadow(0 0 12px var(--neon-pink));
+  }
+
+  .hero-equinox {
+    font-family: 'Orbitron', monospace;
+    font-weight: 900;
+    font-size: clamp(1.8rem, 6vw, 5rem);
+    color: var(--neon-pink);
+    letter-spacing: 0.6em;
+    text-transform: uppercase;
+    text-shadow:
+      0 0 20px var(--neon-pink),
+      0 0 60px rgba(255,45,120,0.5);
+    margin-bottom: 40px;
+  }
+
+  .hero-tagline {
+    font-family: 'VT323', monospace;
+    font-size: 1.3rem;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 0.25em;
+    margin-bottom: 60px;
+    max-width: 600px;
+  }
+  .hero-tagline em {
+    color: var(--neon-cyan);
+    font-style: normal;
+  }
+
+  .hero-cta-group {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--neon-pink), var(--neon-purple));
+    color: #fff;
+    font-family: 'Orbitron', monospace;
+    font-weight: 700;
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    padding: 16px 40px;
+    border: none;
+    cursor: crosshair;
+    text-transform: uppercase;
+    text-decoration: none;
+    display: inline-block;
+    box-shadow: 0 0 30px rgba(255,45,120,0.5), inset 0 1px 0 rgba(255,255,255,0.15);
+    transition: all 0.3s;
+    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+  }
+  .btn-primary:hover {
+    box-shadow: 0 0 50px rgba(255,45,120,0.8), inset 0 1px 0 rgba(255,255,255,0.2);
+    transform: translateY(-2px);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--neon-cyan);
+    font-family: 'Orbitron', monospace;
+    font-weight: 700;
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    padding: 15px 40px;
+    border: 1px solid var(--neon-cyan);
+    cursor: crosshair;
+    text-transform: uppercase;
+    text-decoration: none;
+    display: inline-block;
+    box-shadow: 0 0 15px rgba(0,245,255,0.2), inset 0 0 15px rgba(0,245,255,0.05);
+    transition: all 0.3s;
+    clip-path: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px);
+  }
+  .btn-secondary:hover {
+    background: rgba(0,245,255,0.08);
+    box-shadow: 0 0 30px rgba(0,245,255,0.4), inset 0 0 20px rgba(0,245,255,0.1);
+    transform: translateY(-2px);
+  }
+
+  
+  .ticker {
+    position: relative;
+    z-index: 2;
+    background: rgba(255,45,120,0.1);
+    border-top: 1px solid rgba(255,45,120,0.3);
+    border-bottom: 1px solid rgba(255,45,120,0.3);
+    padding: 10px 0;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+  }
+  .ticker-label {
+    flex-shrink: 0;
+    background: var(--neon-pink);
+    color: #000;
+    font-family: 'Orbitron', monospace;
+    font-weight: 700;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    padding: 4px 16px;
+    margin-right: 20px;
+  }
+  .ticker-content {
+    display: flex;
+    gap: 80px;
+    animation: ticker-scroll 30s linear infinite;
+    white-space: nowrap;
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 0.15em;
+  }
+  .ticker-content span { color: var(--neon-pink); }
+  @keyframes ticker-scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  
+  .section {
+    position: relative;
+    z-index: 1;
+    padding: 100px 48px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 60px;
+  }
+  .section-num {
+    font-family: 'VT323', monospace;
+    font-size: 1rem;
+    color: var(--neon-pink);
+    letter-spacing: 0.3em;
+    text-shadow: 0 0 10px var(--neon-pink);
+  }
+  .section-title {
+    font-family: 'Orbitron', monospace;
+    font-weight: 700;
+    font-size: 1.4rem;
+    color: #fff;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+  }
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(0,245,255,0.5), transparent);
+  }
+
+  
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+  }
+
+  .card {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(0,245,255,0.12);
+    padding: 36px 30px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+    cursor: crosshair;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 0%, rgba(0,245,255,0.05) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .card:hover { border-color: rgba(0,245,255,0.35); transform: translateY(-4px); box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+  .card:hover::before, .card:hover::after { opacity: 1; }
+
+  .card-icon {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 20px;
+    filter: drop-shadow(0 0 8px currentColor);
+  }
+
+  .card-label {
+    font-family: 'VT323', monospace;
+    font-size: 0.85rem;
+    color: var(--neon-pink);
+    letter-spacing: 0.3em;
+    margin-bottom: 10px;
+  }
+  .card-title {
+    font-family: 'Orbitron', monospace;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #fff;
+    letter-spacing: 0.1em;
+    margin-bottom: 14px;
+  }
+  .card-body {
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.4);
+    line-height: 1.8;
+    letter-spacing: 0.05em;
+  }
+  .card-placeholder {
+    font-family: 'VT323', monospace;
+    color: rgba(255,45,120,0.3);
+    font-size: 0.9rem;
+    letter-spacing: 0.1em;
+    margin-top: 16px;
+    border-top: 1px dashed rgba(255,45,120,0.2);
+    padding-top: 12px;
+  }
+
+  
+  .status-bar {
+    position: relative;
+    z-index: 2;
+    background: rgba(0,0,0,0.6);
+    border-top: 1px solid rgba(0,245,255,0.1);
+    border-bottom: 1px solid rgba(0,245,255,0.1);
+    padding: 24px 48px;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 24px;
+  }
+
+  .stat {
+    text-align: center;
+  }
+  .stat-val {
+    font-family: 'VT323', monospace;
+    font-size: 2.5rem;
+    color: var(--neon-cyan);
+    text-shadow: 0 0 20px var(--neon-cyan);
+    display: block;
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    color: rgba(255,255,255,0.35);
+    text-transform: uppercase;
+    margin-top: 4px;
+    display: block;
+  }
+
+  
+  .zones-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    margin-top: 8px;
+  }
+  @media (max-width: 700px) {
+    .zones-grid { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    nav { padding: 14px 20px; }
+    .hero-equinox { letter-spacing: 0.3em; }
+  }
+
+  .zone {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.05);
+    padding: 28px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transition: all 0.3s;
+    cursor: crosshair;
+  }
+  .zone:hover { background: rgba(0,245,255,0.04); border-color: rgba(0,245,255,0.2); }
+
+  .zone-class {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Orbitron', monospace;
+    font-weight: 900;
+    font-size: 0.8rem;
+    flex-shrink: 0;
+  }
+  .zone-class.safe { background: rgba(0,200,80,0.15); border: 2px solid #00c850; color: #00c850; box-shadow: 0 0 12px rgba(0,200,80,0.3); }
+  .zone-class.euclid { background: rgba(255,200,0,0.1); border: 2px solid #ffc800; color: #ffc800; box-shadow: 0 0 12px rgba(255,200,0,0.3); }
+  .zone-class.keter { background: rgba(255,45,120,0.12); border: 2px solid var(--neon-pink); color: var(--neon-pink); box-shadow: 0 0 12px rgba(255,45,120,0.4); }
+
+  .zone-info { flex: 1; }
+  .zone-name {
+    font-family: 'Orbitron', monospace;
+    font-weight: 700;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+  .zone-desc {
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.35);
+    letter-spacing: 0.05em;
+  }
+
+  
+  footer {
+    position: relative;
+    z-index: 2;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding: 40px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  .footer-logo {
+    font-family: 'Orbitron', monospace;
+    font-weight: 900;
+    font-size: 0.8rem;
+    letter-spacing: 0.3em;
+    color: rgba(255,255,255,0.15);
+  }
+  .footer-note {
+    font-family: 'VT323', monospace;
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.2);
+    letter-spacing: 0.15em;
+  }
+  .footer-note em { color: var(--neon-pink); font-style: normal; }
+
+  
+  .corner-deco {
+    position: fixed;
+    width: 80px;
+    height: 80px;
+    z-index: 50;
+    pointer-events: none;
+  }
+  .corner-deco.tl { top: 0; left: 0; border-top: 2px solid rgba(0,245,255,0.3); border-left: 2px solid rgba(0,245,255,0.3); }
+  .corner-deco.tr { top: 0; right: 0; border-top: 2px solid rgba(0,245,255,0.3); border-right: 2px solid rgba(0,245,255,0.3); }
+  .corner-deco.bl { bottom: 0; left: 0; border-bottom: 2px solid rgba(0,245,255,0.3); border-left: 2px solid rgba(0,245,255,0.3); }
+  .corner-deco.br { bottom: 0; right: 0; border-bottom: 2px solid rgba(0,245,255,0.3); border-right: 2px solid rgba(0,245,255,0.3); }
+
+  
+  .noise {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.025;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  }
+
+  .page-hero { position: relative; z-index: 1; padding: 160px 48px 80px; max-width: 1200px; margin: 0 auto; }
+  .page-eyebrow { font-family: 'VT323', monospace; font-size: 1rem; color: var(--neon-orange); letter-spacing: 0.4em; text-shadow: 0 0 10px var(--neon-orange); margin-bottom: 16px; }
+  .page-title { font-family: 'Orbitron', monospace; font-weight: 900; font-size: clamp(2.5rem, 7vw, 6rem); color: #fff; letter-spacing: 0.15em; line-height: 1; margin-bottom: 20px; }
+  .page-title span { color: var(--neon-pink); text-shadow: 0 0 30px rgba(255,45,120,0.6); }
+  .page-subtitle { font-size: 0.8rem; color: rgba(255,255,255,0.35); letter-spacing: 0.2em; max-width: 500px; line-height: 1.9; }
+  .page-divider { width: 100%; height: 1px; background: linear-gradient(90deg, var(--neon-cyan), transparent); box-shadow: 0 0 8px var(--neon-cyan); margin: 40px 0; opacity: 0.4; }
+  .nav-logo { text-decoration: none; }
+  .nav-links a.active { color: var(--neon-cyan); text-shadow: 0 0 10px var(--neon-cyan); }
+  .nav-links a.active::after { transform: scaleX(1); background: var(--neon-cyan); box-shadow: 0 0 8px var(--neon-cyan); }
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.75rem; letter-spacing: 0.08em; }
+  thead tr { border-bottom: 1px solid rgba(0,245,255,0.3); }
+  th { font-family: 'Orbitron', monospace; font-weight: 700; font-size: 0.65rem; letter-spacing: 0.3em; color: var(--neon-cyan); text-transform: uppercase; padding: 14px 20px; text-align: left; }
+  td { padding: 16px 20px; color: rgba(255,255,255,0.5); border-bottom: 1px solid rgba(255,255,255,0.04); vertical-align: middle; }
+  tr:hover td { background: rgba(0,245,255,0.03); color: rgba(255,255,255,0.7); }
+  .badge { display: inline-block; font-family: 'Orbitron', monospace; font-weight: 700; font-size: 0.6rem; letter-spacing: 0.15em; padding: 3px 10px; border-radius: 2px; }
+  .badge.safe { background: rgba(0,200,80,0.15); border: 1px solid #00c850; color: #00c850; }
+  .badge.euclid { background: rgba(255,200,0,0.1); border: 1px solid #ffc800; color: #ffc800; }
+  .badge.keter { background: rgba(255,45,120,0.12); border: 1px solid var(--neon-pink); color: var(--neon-pink); }
+  .badge.thaumiel { background: rgba(191,0,255,0.12); border: 1px solid var(--neon-purple); color: var(--neon-purple); }
+  .badge.neutralized { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.4); }
+  .redacted { background: rgba(255,255,255,0.07); color: transparent; user-select: none; border-radius: 2px; }
+  .faction-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 2px; }
+  .faction-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); padding: 40px 36px; position: relative; overflow: hidden; transition: all 0.3s; cursor: crosshair; }
+  .faction-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; transition: box-shadow 0.3s; }
+  .faction-card.foundation::before { background: var(--neon-cyan); }
+  .faction-card.chaos::before { background: var(--neon-pink); }
+  .faction-card.mc::before { background: var(--neon-orange); }
+  .faction-card.goc::before { background: var(--neon-purple); }
+  .faction-card.serpents::before { background: #00c850; }
+  .faction-card.nobody::before { background: rgba(255,255,255,0.3); }
+  .faction-card:hover { background: rgba(255,255,255,0.04); transform: translateX(4px); }
+  .faction-name { font-family: 'Orbitron', monospace; font-weight: 900; font-size: 1rem; letter-spacing: 0.15em; color: #fff; margin-bottom: 8px; }
+  .faction-code { font-family: 'VT323', monospace; font-size: 0.85rem; letter-spacing: 0.3em; margin-bottom: 20px; }
+  .faction-desc { font-size: 0.75rem; color: rgba(255,255,255,0.4); line-height: 1.9; letter-spacing: 0.05em; margin-bottom: 24px; }
+  .faction-stats { display: flex; gap: 24px; flex-wrap: wrap; }
+  .fstat { font-size: 0.65rem; letter-spacing: 0.2em; color: rgba(255,255,255,0.25); text-transform: uppercase; }
+  .fstat strong { display: block; font-family: 'VT323', monospace; font-size: 1.4rem; color: rgba(255,255,255,0.6); letter-spacing: 0.1em; }
+  .containment-log { display: flex; flex-direction: column; gap: 2px; }
+  .log-entry { display: grid; grid-template-columns: 120px 80px 1fr auto; align-items: center; gap: 20px; padding: 18px 24px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.04); transition: all 0.2s; cursor: crosshair; }
+  .log-entry:hover { background: rgba(0,245,255,0.03); border-color: rgba(0,245,255,0.15); }
+  .log-id { font-family: 'Orbitron', monospace; font-weight: 700; font-size: 0.75rem; color: var(--neon-cyan); letter-spacing: 0.1em; }
+  .log-status { font-family: 'VT323', monospace; font-size: 1rem; letter-spacing: 0.15em; }
+  .log-status.contained { color: #00c850; }
+  .log-status.breach { color: var(--neon-pink); animation: blink-status 1.5s ease infinite; }
+  .log-status.monitoring { color: #ffc800; }
+  @keyframes blink-status { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
+  @media (max-width: 700px) { .page-hero { padding: 130px 24px 60px; } .section { padding: 40px 24px 80px; } .log-entry { grid-template-columns: 1fr 1fr; } .rule-entry { grid-template-columns: 60px 1fr; } .rule-severity { grid-column: 2; } }
+  .rules-list { display: flex; flex-direction: column; gap: 2px; }
+  .rule-entry { display: grid; grid-template-columns: 80px 1fr auto; align-items: center; gap: 24px; padding: 22px 28px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); transition: all 0.2s; cursor: crosshair; }
+  .rule-entry:hover { background: rgba(0,245,255,0.03); border-color: rgba(0,245,255,0.15); }
+  .rule-num { font-family: 'Orbitron', monospace; font-weight: 700; font-size: 0.7rem; color: rgba(0,245,255,0.5); letter-spacing: 0.1em; }
+  .rule-title { font-family: 'Orbitron', monospace; font-weight: 700; font-size: 0.8rem; color: #fff; letter-spacing: 0.1em; margin-bottom: 6px; }
+  .rule-body { font-size: 0.72rem; color: rgba(255,255,255,0.35); letter-spacing: 0.05em; line-height: 1.7; }
+  .rule-severity { font-family: 'VT323', monospace; font-size: 0.85rem; letter-spacing: 0.2em; white-space: nowrap; }
+  .rule-severity.low { color: #00c850; }
+  .rule-severity.mid { color: #ffc800; }
+  .rule-severity.high { color: var(--neon-pink); text-shadow: 0 0 8px rgba(255,45,120,0.5); }
+</style>
+</head>
+<body>
+<div class="grid-bg"></div>
+<div class="grid-floor"></div>
+<div class="glow-orb pink"></div>
+<div class="glow-orb cyan"></div>
+<div class="glow-orb purple"></div>
+<div class="noise"></div>
+<div class="corner-deco tl"></div>
+<div class="corner-deco tr"></div>
+<div class="corner-deco bl"></div>
+<div class="corner-deco br"></div>
+
+<nav>
+  <a href="index.html" class="nav-logo" style="text-decoration:none;display:flex;align-items:center;gap:14px;">
+    <div class="logo-mark">
+      <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="50" cy="50" r="46" stroke="#00f5ff" stroke-width="2" stroke-dasharray="8 4"/>
+        <circle cx="50" cy="50" r="34" stroke="#00f5ff" stroke-width="1.5" opacity="0.6"/>
+        <path d="M50 8 L58 22 L50 18 L42 22 Z" fill="#00f5ff"/>
+        <path d="M92 50 L78 58 L82 50 L78 42 Z" fill="#00f5ff"/>
+        <path d="M50 92 L42 78 L50 82 L58 78 Z" fill="#00f5ff"/>
+        <path d="M8 50 L22 42 L18 50 L22 58 Z" fill="#00f5ff"/>
+        <circle cx="50" cy="50" r="6" fill="#00f5ff" opacity="0.9"/>
+        <circle cx="50" cy="50" r="3" fill="#000"/>
+        <line x1="50" y1="20" x2="50" y2="80" stroke="#00f5ff" stroke-width="1" opacity="0.3"/>
+        <line x1="20" y1="50" x2="80" y2="50" stroke="#00f5ff" stroke-width="1" opacity="0.3"/>
+      </svg>
+    </div>
+    <div class="nav-title">
+      SCP: EQUINOX
+      <span>FOUNDATION ROLEPLAY</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="factions.html">Factions</a></li>
+    <li><a href="containment.html">Containment</a></li>
+    <li><a href="database.html" class="active">Rules</a></li>
+  </ul>
+  <button class="nav-btn">Access Terminal</button>
+</nav>
+
+<div class="page-hero">
+  <div class="page-eyebrow">// MANDATORY READING -- ALL PERSONNEL</div>
+  <div class="page-title">RULES &amp; <span>GUIDELINES</span></div>
+  <div class="page-subtitle">This is a text-based roleplay server. All participants are expected to read and follow these directives before engaging. Ignorance is not an excuse. Violations are logged and actioned by staff.</div>
+  <div class="page-divider"></div>
+</div>
+
+<div class="section" style="padding-top:0">
+  <div class="section-header">
+    <span class="section-num">// 01</span>
+    <span class="section-title">General Conduct</span>
+    <div class="section-line"></div>
+  </div>
+  <div class="rules-list">
+
+    <div class="rule-entry">
+      <div class="rule-num">R-001</div>
+      <div class="rule-content">
+        <div class="rule-title">Respect Everyone</div>
+        <div class="rule-body">Treat all members with basic respect both in and out of character. Targeted insults, personal attacks, and sustained hostility toward other players will not be tolerated regardless of in-character justification.</div>
+      </div>
+      <div class="rule-severity mid">SERIOUS</div>
+    </div>
+
+    <div class="rule-entry">
+      <div class="rule-num">R-002</div>
+      <div class="rule-content">
+        <div class="rule-title">No Metagaming</div>
+        <div class="rule-body">Your character only knows what they have learned through in-character interactions. Using out-of-character knowledge (such as information from other channels, DMs, or previous characters) to influence your RP is strictly prohibited.</div>
+      </div>
+      <div class="rule-severity mid">SERIOUS</div>
+    </div>
+
+    <div class="rule-entry">
+      <div class="rule-num">R-003</div>
+      <div class="rule-content">
+        <div class="rule-title">No Godmodding</div>
+        <div class="rule-body">You do not control other players' characters. Do not write actions that dictate what another character does, feels, or experiences without their consent. All combat and consequential actions must be collaborative.</div>
+      </div>
+      <div class="rule-severity mid">SERIOUS</div>
+    </div>
+
+    <div class="rule-entry">
+      <div class="rule-num">R-004</div>
+      <div class="rule-content">
+        <div class="rule-title">No powerplaying</div>
+        <div class="rule-body">Characters must have realistic limitations. You cannot be invincible, all-knowing, or conveniently perfect. Play your character's weaknesses as seriously as their strengths. Unrealistic feats without staff approval will be voided.</div>
+      </div>
+      <div class="rule-severity mid">SERIOUS</div>
+    </div>
+
+    <div class="rule-entry">
+      <div class="rule-num">R-005</div>
+      <div class="rule-content">
+        <div class="rule-title">Stay In Character</div>
+        <div class="rule-body">Keep out-of-character conversation to designated OOC channels. Do not break immersion in active RP scenes. If you need to step out of a scene, use double brackets (( )) to indicate OOC communication and keep it brief.</div>
+      </div>
+      <div class="rule-severity mid">SERIOUS</div>
+    </div>
+
+    <div class="rule-entry">
+      <div class="rule-num">R-006</div>
+      <div class="rule-content">
+        <div class="rule-title">No ERP (Erotic Roleplay)</div>
+        <div class="rule-body">Explicit sexual content of any kind is strictly forbidden on this server. This includes implied content, suggestive scenes pushed past a fade-to-black, or soliciting other players for such content. Zero tolerance, no exceptions.</div>
+      </div>
+      <div class="rule-severity high">CRITICAL</div>
+    </div>
+
+    <div class="rule-entry">
+      <div class="rule-num">R-007</div>
+      <div class="rule-content">
+        <div class="rule-title">No Harassment or Hate Speech</div>
+        <div class="rule-body">Racism, homophobia, transphobia, ableism, or any other form of targeted hate speech, whether in-character or out, results in an immediate permanent ban. In-character framing does not excuse real-world bigotry.</div>
+      </div>
+      <div class="rule-severity high">CRITICAL</div>
+    </div>
+
+    <div class="rule-entry">
+      <div class="rule-num">R-008</div>
+      <div class="rule-content">
+        <div class="rule-title">Follow Staff Directives</div>
+        <div class="rule-body">Staff decisions are final during active moderation. If you disagree with a ruling, raise it calmly through the appeals channel after the fact. Arguing with staff in public channels or during an active scene will be treated as misconduct.</div>
+      </div>
+      <div class="rule-severity mid">SERIOUS</div>
+    </div>
+
+    <div class="rule-entry">
+      <div class="rule-num">R-009</div>
+      <div class="rule-content">
+        <div class="rule-title">Respect Character Death and Consequences</div>
+        <div class="rule-body">If your character dies or suffers a major consequence through legitimate RP, accept it. Retconning deaths, injuries, or events without staff approval undermines the integrity of the server narrative and will be reversed.</div>
+      </div>
+      <div class="rule-severity mid">SERIOUS</div>
+    </div>
+
+    <div class="rule-entry">
+      <div class="rule-num">R-010</div>
+      <div class="rule-content">
+        <div class="rule-title">No Lore Violations</div>
+        <div class="rule-body">All roleplay must remain consistent with established SCP: EQUINOX lore. Do not introduce canon-breaking elements, unauthorized SCPs, or contradictory backstory without approval from the lore team.</div>
+      </div>
+      <div class="rule-severity mid">SERIOUS</div>
+    </div>
+
+  </div>
+</div>
+
+<div class="section" style="padding-top:0">
+  <div class="section-header">
+    <span class="section-num">// 02</span>
+    <span class="section-title">Text RP Standards</span>
+    <div class="section-line"></div>
+  </div>
+  <div class="cards-grid">
+    <div class="card">
+      <div class="card-label">// WRITING FORMAT</div>
+      <div class="card-title">Post Quality</div>
+      <div class="card-body">Write in third person past tense. Put effort into your posts. One-liners in serious RP scenes are disrespectful to other writers. Minimum two sentences per action post is expected. Longer scenes deserve longer responses.</div>
+    </div>
+    <div class="card">
+      <div class="card-label">// CONSENT</div>
+      <div class="card-title">Dark Themes</div>
+      <div class="card-body">SCP lore involves heavy and disturbing themes. Any scene involving torture, psychological horror, or character trauma requires OOC consent from all involved players beforehand. Use the content warning system provided by staff.</div>
+    </div>
+    <div class="card">
+      <div class="card-label">// CHARACTERS</div>
+      <div class="card-title">Character Approval</div>
+      <div class="card-body">All new characters must be submitted to the character approval channel before use in active RP. High-clearance Foundation roles, anomalous characters, and faction leadership positions require additional staff sign-off.</div>
+    </div>
+    <div class="card">
+      <div class="card-label">// CONFLICT</div>
+      <div class="card-title">Player vs Player</div>
+      <div class="card-body">Capture, interrogation, combat, or elimination scenarios require mutual OOC agreement before they begin. Surprise hostile action against another player's character without prior consent is treated as godmodding.</div>
+    </div>
+
+</div>
+
+<div class="section" style="padding-top:0">
+  <div class="section-header">
+    <span class="section-num">// 03</span>
+    <span class="section-title">Escalation System</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2px;margin-bottom:40px;">
+
+    <div style="background:rgba(255,200,0,0.04);border:1px solid rgba(255,200,0,0.2);padding:32px 28px;">
+      <div style="font-family:'VT323',monospace;font-size:0.8rem;letter-spacing:0.35em;color:#ffc800;margin-bottom:12px;">// TIER 01</div>
+      <div style="font-family:'Orbitron',monospace;font-weight:700;font-size:1rem;letter-spacing:0.15em;color:#fff;margin-bottom:16px;">SERIOUS</div>
+      <div style="font-size:0.72rem;color:rgba(255,255,255,0.4);line-height:1.8;letter-spacing:0.05em;margin-bottom:20px;">Metagaming, godmodding, powergaming, breaking character, ignoring staff, non-consensual PvP, disrespecting other members, retconning without approval, lore violations.</div>
+      <div style="font-family:'VT323',monospace;font-size:1.1rem;color:#ffc800;letter-spacing:0.2em;">KICK / TEMP BAN</div>
+      <div style="font-size:0.65rem;color:rgba(255,255,255,0.25);margin-top:8px;letter-spacing:0.1em;">3 SERIOUS OFFENCES = ESCALATES TO CRITICAL</div>
+    </div>
+
+    <div style="background:rgba(255,45,120,0.05);border:1px solid rgba(255,45,120,0.25);padding:32px 28px;">
+      <div style="font-family:'VT323',monospace;font-size:0.8rem;letter-spacing:0.35em;color:var(--neon-pink);margin-bottom:12px;">// TIER 02</div>
+      <div style="font-family:'Orbitron',monospace;font-weight:700;font-size:1rem;letter-spacing:0.15em;color:#fff;margin-bottom:16px;">CRITICAL</div>
+      <div style="font-size:0.72rem;color:rgba(255,255,255,0.4);line-height:1.8;letter-spacing:0.05em;margin-bottom:20px;">ERP, hate speech, harassment, continuing a scene after a pause is called, ban evasion, or accumulation of 3 serious offences on record.</div>
+      <div style="font-family:'VT323',monospace;font-size:1.1rem;color:var(--neon-pink);letter-spacing:0.2em;text-shadow:0 0 8px rgba(255,45,120,0.5);">PERMANENT BAN</div>
+      <div style="font-size:0.65rem;color:rgba(255,255,255,0.25);margin-top:8px;letter-spacing:0.1em;">NO APPEAL. NO EXCEPTIONS.</div>
+    </div>
+
+  </div>
+
+  <div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);padding:24px 28px;font-size:0.72rem;color:rgba(255,255,255,0.35);line-height:1.9;letter-spacing:0.06em;">
+    <span style="font-family:'Orbitron',monospace;font-weight:700;font-size:0.65rem;color:rgba(0,245,255,0.6);letter-spacing:0.25em;display:block;margin-bottom:10px;">// NOTE ON ESCALATION</span>
+    Violations are tracked 3 separate violations on your record at any point will result in an automatic escalation to a Critical punishment regardless of how much time has passed between them. If you believe a violation has been recorded in error, contact a staff member through the appeals channel.
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo">SCP: EQUINOX &nbsp;///&nbsp; FOUNDATION ROLEPLAY</div>
+  <div class="footer-note">
+    <em>NOT AFFILIATED</em> WITH SCP WIKI — FAN PROJECT — ALL RIGHTS TO THEIR RESPECTIVE OWNERS
+  </div>
+  <div style="font-family:'VT323',monospace;font-size:0.85rem;color:rgba(255,255,255,0.15);letter-spacing:0.2em;">
+    &copy; 2025 EQUINOX PROJECT
+  </div>
+</footer>
+</body>
+</html>
