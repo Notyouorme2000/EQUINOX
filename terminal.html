@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Access Terminal -- SCP: EQUINOX</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=VT323&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --neon-pink: #ff2d78;
+    --neon-cyan: #00f5ff;
+    --neon-purple: #bf00ff;
+    --neon-orange: #ff6b00;
+    --dark-bg: #060612;
+    --grid-color: rgba(0, 245, 255, 0.07);
+    --win-bg: #0a0a18;
+    --win-border: rgba(0,245,255,0.25);
+    --win-titlebar: rgba(0,10,30,0.95);
+    --win-text: #c8f0ff;
+    --win-dim: rgba(140,200,255,0.45);
+    --win-prompt: #00f5ff;
+    --win-error: #ff2d78;
+    --win-success: #00e87a;
+    --win-warn: #ffc800;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--dark-bg);
+    font-family: 'Share Tech Mono', monospace;
+    overflow-x: hidden;
+    cursor: crosshair;
+    min-height: 100vh;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.12) 2px, rgba(0,0,0,0.12) 4px);
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  .grid-bg {
+    position: fixed;
+    inset: 0;
+    background-image: linear-gradient(var(--grid-color) 1px, transparent 1px), linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+    background-size: 60px 60px;
+    z-index: 0;
+  }
+  .grid-floor {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: 50vh;
+    background-image: linear-gradient(rgba(0,245,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0,245,255,0.05) 1px, transparent 1px);
+    background-size: 80px 80px;
+    transform: perspective(600px) rotateX(60deg);
+    transform-origin: bottom center;
+    z-index: 0;
+  }
+  .glow-orb { position: fixed; border-radius: 50%; filter: blur(80px); z-index: 0; pointer-events: none; }
+  .glow-orb.pink { width: 400px; height: 400px; background: rgba(255,45,120,0.12); top: -100px; left: -100px; animation: drift 8s ease-in-out infinite alternate; }
+  .glow-orb.cyan { width: 500px; height: 500px; background: rgba(0,245,255,0.08); bottom: -150px; right: -150px; animation: drift 10s ease-in-out infinite alternate-reverse; }
+  @keyframes drift { from { transform: translate(0,0) scale(1); } to { transform: translate(30px,20px) scale(1.1); } }
+
+  .corner-deco { position: fixed; width: 80px; height: 80px; z-index: 50; pointer-events: none; }
+  .corner-deco.tl { top:0;left:0;border-top:2px solid rgba(0,245,255,0.3);border-left:2px solid rgba(0,245,255,0.3); }
+  .corner-deco.tr { top:0;right:0;border-top:2px solid rgba(0,245,255,0.3);border-right:2px solid rgba(0,245,255,0.3); }
+  .corner-deco.bl { bottom:0;left:0;border-bottom:2px solid rgba(0,245,255,0.3);border-left:2px solid rgba(0,245,255,0.3); }
+  .corner-deco.br { bottom:0;right:0;border-bottom:2px solid rgba(0,245,255,0.3);border-right:2px solid rgba(0,245,255,0.3); }
+
+  nav {
+    position: fixed; top:0; left:0; right:0; z-index:100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 48px;
+    border-bottom: 1px solid rgba(0,245,255,0.15);
+    background: rgba(6,6,18,0.85);
+    backdrop-filter: blur(12px);
+  }
+  .nav-logo { text-decoration: none; display: flex; align-items: center; gap: 14px; }
+  .logo-mark { width: 44px; height: 44px; flex-shrink: 0; }
+  .logo-mark svg { width:100%;height:100%; filter: drop-shadow(0 0 8px var(--neon-cyan)) drop-shadow(0 0 2px var(--neon-cyan)); animation: spin-slow 20s linear infinite; }
+  @keyframes spin-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  .nav-title { font-family: 'Orbitron', monospace; font-weight: 900; font-size: 0.75rem; letter-spacing: 0.4em; color: var(--neon-cyan); text-shadow: 0 0 12px var(--neon-cyan); line-height: 1.2; }
+  .nav-title span { display: block; font-size: 0.6rem; letter-spacing: 0.3em; color: rgba(255,255,255,0.4); font-weight: 400; margin-top: 2px; }
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a { color: rgba(255,255,255,0.5); text-decoration: none; font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; transition: color 0.2s, text-shadow 0.2s; position: relative; }
+  .nav-links a::after { content:''; position: absolute; bottom:-4px; left:0; right:0; height:1px; background: var(--neon-pink); transform: scaleX(0); transition: transform 0.3s; box-shadow: 0 0 8px var(--neon-pink); }
+  .nav-links a:hover { color: var(--neon-cyan); text-shadow: 0 0 10px var(--neon-cyan); }
+  .nav-links a:hover::after { transform: scaleX(1); }
+  .nav-links a.active { color: var(--neon-cyan); text-shadow: 0 0 10px var(--neon-cyan); }
+  .nav-links a.active::after { transform: scaleX(1); background: var(--neon-cyan); box-shadow: 0 0 8px var(--neon-cyan); }
+  .nav-btn { background: transparent; border: 1px solid var(--neon-pink); color: var(--neon-pink); font-family: 'Share Tech Mono', monospace; font-size: 0.7rem; letter-spacing: 0.2em; padding: 8px 20px; cursor: crosshair; text-transform: uppercase; transition: all 0.2s; box-shadow: 0 0 10px rgba(255,45,120,0.3); }
+  .nav-btn:hover { background: var(--neon-pink); color: #000; box-shadow: 0 0 20px rgba(255,45,120,0.6); }
+
+  footer { position: relative; z-index:2; border-top: 1px solid rgba(255,255,255,0.06); padding: 40px 48px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px; }
+  .footer-logo { font-family: 'Orbitron', monospace; font-weight: 900; font-size: 0.8rem; letter-spacing: 0.3em; color: rgba(255,255,255,0.15); }
+  .footer-note { font-family: 'VT323', monospace; font-size: 0.9rem; color: rgba(255,255,255,0.2); letter-spacing: 0.15em; }
+  .footer-note em { color: var(--neon-pink); font-style: normal; }
+
+  @media (max-width: 700px) { nav { padding: 14px 20px; } .nav-links { display: none; } }
+
+  .terminal-page {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 100px 24px 60px;
+  }
+
+  .terminal-eyebrow {
+    font-family: 'VT323', monospace;
+    font-size: 1rem;
+    color: var(--neon-orange);
+    letter-spacing: 0.5em;
+    text-shadow: 0 0 10px var(--neon-orange);
+    margin-bottom: 32px;
+    text-align: center;
+  }
+
+  .window {
+    width: 100%;
+    max-width: 780px;
+    background: var(--win-bg);
+    border: 1px solid var(--win-border);
+    box-shadow:
+      0 0 0 1px rgba(0,0,0,0.8),
+      0 30px 80px rgba(0,0,0,0.8),
+      0 0 40px rgba(0,245,255,0.06),
+      inset 0 1px 0 rgba(0,245,255,0.08);
+    border-radius: 2px;
+  }
+
+  .titlebar {
+    background: var(--win-titlebar);
+    border-bottom: 1px solid var(--win-border);
+    padding: 0;
+    display: flex;
+    align-items: stretch;
+    height: 32px;
+    user-select: none;
+  }
+
+  .titlebar-icon {
+    width: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 1px solid rgba(0,245,255,0.1);
+    flex-shrink: 0;
+  }
+  .titlebar-icon svg { width: 14px; height: 14px; }
+
+  .titlebar-title {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: rgba(0,245,255,0.6);
+    text-transform: uppercase;
+  }
+
+  .titlebar-controls {
+    display: flex;
+    align-items: stretch;
+  }
+  .tbtn {
+    width: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-left: 1px solid rgba(0,245,255,0.08);
+    font-size: 0.65rem;
+    color: rgba(255,255,255,0.3);
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 0.1em;
+  }
+  .tbtn:hover { background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.7); }
+  .tbtn.close:hover { background: rgba(255,45,120,0.3); color: var(--neon-pink); }
+
+  .menubar {
+    display: flex;
+    border-bottom: 1px solid rgba(0,245,255,0.08);
+    padding: 0 4px;
+    background: rgba(0,5,20,0.6);
+  }
+  .mbtn {
+    padding: 4px 12px;
+    font-size: 0.62rem;
+    letter-spacing: 0.15em;
+    color: rgba(255,255,255,0.35);
+    cursor: crosshair;
+    transition: all 0.15s;
+    text-transform: uppercase;
+  }
+  .mbtn:hover { color: var(--neon-cyan); background: rgba(0,245,255,0.06); }
+
+  .terminal-body {
+    padding: 16px 20px;
+    min-height: 420px;
+    max-height: 520px;
+    overflow-y: auto;
+    font-size: 0.78rem;
+    line-height: 1.7;
+    color: var(--win-text);
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0,245,255,0.2) transparent;
+  }
+  .terminal-body::-webkit-scrollbar { width: 6px; }
+  .terminal-body::-webkit-scrollbar-track { background: transparent; }
+  .terminal-body::-webkit-scrollbar-thumb { background: rgba(0,245,255,0.2); border-radius: 3px; }
+
+  .line { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 1px; }
+  .line.gap { margin-bottom: 10px; }
+
+  .prompt { color: var(--win-prompt); flex-shrink: 0; }
+  .prompt.sys { color: var(--win-warn); }
+  .prompt.err { color: var(--win-error); }
+  .prompt.ok { color: var(--win-success); }
+
+  .text { word-break: break-word; }
+  .text.dim { color: var(--win-dim); }
+  .text.cyan { color: var(--neon-cyan); }
+  .text.pink { color: var(--neon-pink); }
+  .text.warn { color: var(--win-warn); }
+  .text.ok { color: var(--win-success); }
+  .text.comment { color: rgba(255,255,255,0.2); font-style: italic; }
+
+  .divider-line {
+    border: none;
+    border-top: 1px solid rgba(0,245,255,0.1);
+    margin: 10px 0;
+  }
+
+  .input-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-top: 1px solid rgba(0,245,255,0.12);
+    padding: 10px 20px;
+    background: rgba(0,0,0,0.3);
+  }
+  .input-prompt {
+    color: var(--win-prompt);
+    font-size: 0.78rem;
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+  .input-field {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #fff;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.78rem;
+    caret-color: var(--neon-cyan);
+    letter-spacing: 0.05em;
+  }
+  .input-field::placeholder { color: rgba(255,255,255,0.15); }
+  .submit-btn {
+    background: transparent;
+    border: 1px solid rgba(0,245,255,0.3);
+    color: var(--neon-cyan);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    padding: 4px 14px;
+    cursor: crosshair;
+    text-transform: uppercase;
+    transition: all 0.2s;
+  }
+  .submit-btn:hover { background: rgba(0,245,255,0.1); border-color: var(--neon-cyan); }
+
+  .statusbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid rgba(0,245,255,0.08);
+    padding: 4px 20px;
+    background: rgba(0,0,0,0.4);
+  }
+  .status-left { display: flex; gap: 20px; align-items: center; }
+  .status-item {
+    font-size: 0.58rem;
+    letter-spacing: 0.15em;
+    color: rgba(255,255,255,0.2);
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .status-dot { width: 5px; height: 5px; border-radius: 50%; }
+  .status-dot.green { background: var(--win-success); box-shadow: 0 0 6px var(--win-success); }
+  .status-dot.red { background: var(--neon-pink); box-shadow: 0 0 6px var(--neon-pink); animation: pulse-dot 2s ease infinite; }
+  .status-dot.yellow { background: var(--win-warn); box-shadow: 0 0 6px var(--win-warn); }
+  @keyframes pulse-dot { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
+
+  .blink {
+    animation: blink-cursor 1s step-end infinite;
+  }
+  @keyframes blink-cursor { 0%,100% { opacity:1; } 50% { opacity:0; } }
+
+  .typed { display: inline; }
+
+  @keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
+  .line { animation: fadein 0.1s ease both; }
+</style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+<div class="grid-floor"></div>
+<div class="glow-orb pink"></div>
+<div class="glow-orb cyan"></div>
+<div class="corner-deco tl"></div>
+<div class="corner-deco tr"></div>
+<div class="corner-deco bl"></div>
+<div class="corner-deco br"></div>
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    <div class="logo-mark">
+      <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="50" cy="50" r="46" stroke="#00f5ff" stroke-width="2" stroke-dasharray="8 4"/>
+        <circle cx="50" cy="50" r="34" stroke="#00f5ff" stroke-width="1.5" opacity="0.6"/>
+        <path d="M50 8 L58 22 L50 18 L42 22 Z" fill="#00f5ff"/>
+        <path d="M92 50 L78 58 L82 50 L78 42 Z" fill="#00f5ff"/>
+        <path d="M50 92 L42 78 L50 82 L58 78 Z" fill="#00f5ff"/>
+        <path d="M8 50 L22 42 L18 50 L22 58 Z" fill="#00f5ff"/>
+        <circle cx="50" cy="50" r="6" fill="#00f5ff" opacity="0.9"/>
+        <circle cx="50" cy="50" r="3" fill="#000"/>
+        <line x1="50" y1="20" x2="50" y2="80" stroke="#00f5ff" stroke-width="1" opacity="0.3"/>
+        <line x1="20" y1="50" x2="80" y2="50" stroke="#00f5ff" stroke-width="1" opacity="0.3"/>
+      </svg>
+    </div>
+    <div class="nav-title">
+      SCP: EQUINOX
+      <span>FOUNDATION ROLEPLAY</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="factions.html">Factions</a></li>
+    <li><a href="containment.html">Containment</a></li>
+    <li><a href="database.html">Rules</a></li>
+  </ul>
+  <button class="nav-btn" onclick="window.location='terminal.html'">Access Terminal</button>
+</nav>
+
+<div class="terminal-page">
+  <div class="terminal-eyebrow">// FOUNDATION SECURE SHELL v4.1.2</div>
+
+  <div class="window">
+    <div class="titlebar">
+      <div class="titlebar-icon">
+        <svg viewBox="0 0 16 16" fill="none">
+          <rect x="1" y="3" width="14" height="10" rx="1" stroke="#00f5ff" stroke-width="1.2" opacity="0.7"/>
+          <line x1="1" y1="6" x2="15" y2="6" stroke="#00f5ff" stroke-width="1" opacity="0.4"/>
+          <rect x="3" y="8" width="4" height="3" rx="0.5" fill="#00f5ff" opacity="0.3"/>
+        </svg>
+      </div>
+      <div class="titlebar-title">SCP-EQUINOX -- FOUNDATION SHELL -- [SITE-21 NODE]</div>
+      <div class="titlebar-controls">
+        <div class="tbtn">_</div>
+        <div class="tbtn">&#9633;</div>
+        <div class="tbtn close" onclick="window.location='index.html'">&#x2715;</div>
+      </div>
+    </div>
+
+    <div class="menubar">
+      <div class="mbtn">File</div>
+      <div class="mbtn">Edit</div>
+      <div class="mbtn">View</div>
+      <div class="mbtn">Help</div>
+    </div>
+
+    <div class="terminal-body" id="termBody">
+      <div class="line"><span class="text dim">SCP Foundation Secure Shell -- Version 4.1.2 (Build 2026.03.01)</span></div>
+      <div class="line"><span class="text dim">Copyright (c) O5 Council. All rights reserved.</span></div>
+      <div class="line gap"><span class="text dim">Connection established: SITE-21 PRIMARY NODE -- 192.168.██.██</span></div>
+      <div class="line"><span class="prompt sys">[SYS]</span><span class="text warn">&nbsp;Encrypted tunnel active. Session logged.</span></div>
+      <div class="line gap"><span class="prompt sys">[SYS]</span><span class="text dim">&nbsp;Awaiting credentials. Type HELP for available commands.</span></div>
+      <hr class="divider-line">
+    </div>
+
+    <div class="input-row">
+      <span class="input-prompt">EQUINOX&gt;&nbsp;</span>
+      <input class="input-field" id="termInput" type="text" placeholder="enter command..." autocomplete="off" spellcheck="false"/>
+      <button class="submit-btn" onclick="handleCommand()">RUN</button>
+    </div>
+
+    <div class="statusbar">
+      <div class="status-left">
+        <div class="status-item"><div class="status-dot green"></div>TUNNEL ACTIVE</div>
+        <div class="status-item"><div class="status-dot red"></div>BREACH ALERT: SITE-21</div>
+        <div class="status-item"><div class="status-dot yellow"></div>SESSION LOGGED</div>
+      </div>
+      <div class="status-item" id="clock">--:--:--</div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo">SCP: EQUINOX &nbsp;///&nbsp; FOUNDATION ROLEPLAY</div>
+  <div class="footer-note">
+    <em>NOT AFFILIATED</em> WITH SCP WIKI -- FAN PROJECT -- ALL RIGHTS TO THEIR RESPECTIVE OWNERS <em>A PROJECT BY UNPEACEFUL AND TIDE</em>
+  </div>
+  <div style="font-family:'VT323',monospace;font-size:0.85rem;color:rgba(255,255,255,0.15);letter-spacing:0.2em;">
+    &copy; 2026 EQUINOX PROJECT
+  </div>
+</footer>
+
+<script>
+  const body = document.getElementById('termBody');
+  const input = document.getElementById('termInput');
+  const clock = document.getElementById('clock');
+
+  function updateClock() {
+    const now = new Date();
+    clock.textContent = now.toTimeString().slice(0,8);
+  }
+  setInterval(updateClock, 1000);
+  updateClock();
+
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Enter') handleCommand();
+  });
+
+  const history = [];
+  let histIdx = -1;
+
+  input.addEventListener('keydown', e => {
+    if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (histIdx < history.length - 1) histIdx++;
+      input.value = history[histIdx] || '';
+    }
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (histIdx > 0) histIdx--;
+      input.value = history[histIdx] || '';
+    }
+  });
+
+  function print(prompt, cls, text, textCls, gap) {
+    const line = document.createElement('div');
+    line.className = 'line' + (gap ? ' gap' : '');
+    if (prompt) {
+      const p = document.createElement('span');
+      p.className = 'prompt ' + (cls || '');
+      p.textContent = prompt;
+      line.appendChild(p);
+    }
+    const t = document.createElement('span');
+    t.className = 'text ' + (textCls || '');
+    t.innerHTML = '&nbsp;' + text;
+    line.appendChild(t);
+    body.appendChild(line);
+    body.scrollTop = body.scrollHeight;
+  }
+
+  function printRaw(html, gap) {
+    const line = document.createElement('div');
+    line.className = 'line' + (gap ? ' gap' : '');
+    line.innerHTML = html;
+    body.appendChild(line);
+    body.scrollTop = body.scrollHeight;
+  }
+
+  function printDivider() {
+    const hr = document.createElement('hr');
+    hr.className = 'divider-line';
+    body.appendChild(hr);
+  }
+
+  function echoInput(cmd) {
+    print('EQUINOX>', '', cmd, 'cyan');
+  }
+
+  const commands = {
+    help: () => {
+      printDivider();
+      print('[HELP]', 'ok', 'Available commands:', 'ok');
+      print('', '', 'HELP&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-- Display this message', 'dim');
+      print('', '', 'WHOAMI&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-- Display current session info', 'dim');
+      print('', '', 'STATUS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-- Site-wide containment status', 'dim');
+      print('', '', 'FACTIONS&nbsp;&nbsp;&nbsp;-- List active groups of interest', 'dim');
+      print('', '', 'RULES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-- Display server directives', 'dim');
+      print('', '', 'CLEAR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-- Clear terminal output', 'dim');
+      print('', '', 'EXIT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-- Close terminal and return home', 'dim', true);
+      printDivider();
+    },
+    whoami: () => {
+      printDivider();
+      print('[USER]', 'ok', 'SESSION DATA:', 'ok');
+      print('', '', 'User&nbsp;&nbsp;&nbsp;&nbsp;: GUEST-' + Math.floor(Math.random()*9000+1000), 'dim');
+      print('', '', 'Node&nbsp;&nbsp;&nbsp;&nbsp;: SITE-21 PRIMARY', 'dim');
+      print('', '', 'Clearance: LVL-0 (UNVERIFIED)', 'warn');
+      print('', '', 'Status&nbsp;&nbsp;: UNAUTHENTICATED', 'dim', true);
+      printDivider();
+    },
+    status: () => {
+      printDivider();
+      print('[STATUS]', 'sys', 'SITE-21 -- CONTAINMENT REPORT:', 'warn');
+      print('', '', '&#x25CF; SCP-████ &nbsp;[ KETER ]&nbsp;&nbsp;&nbsp;-- <span style="color:var(--neon-pink)">BREACH ACTIVE</span>', 'dim');
+      print('', '', '&#x25CF; SCP-████ &nbsp;[ EUCLID ]&nbsp;&nbsp;-- <span style="color:#ffc800">MONITORING</span>', 'dim');
+      print('', '', '&#x25CF; SCP-████ &nbsp;[ SAFE ]&nbsp;&nbsp;&nbsp;&nbsp;-- <span style="color:#00e87a">CONTAINED</span>', 'dim');
+      print('', '', '&#x25CF; SCP-████ &nbsp;[ THAUMIEL ]-- <span style="color:var(--neon-purple)">CLASSIFIED</span>', 'dim');
+      print('[SYS]', 'sys', 'MTF units en route. All non-essential personnel evacuate.', 'warn', true);
+      printDivider();
+    },
+    factions: () => {
+      printDivider();
+      print('[DB]', 'ok', 'REGISTERED GROUPS OF INTEREST:', 'ok');
+      print('', '', '<span style="color:var(--neon-cyan)">THE FOUNDATION</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-- Secure. Contain. Protect.', 'dim');
+      print('', '', '<span style="color:var(--neon-pink)">CHAOS INSURGENCY</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-- Steal. Weaponize. Survive.', 'dim');
+      print('', '', '<span style="color:var(--neon-orange)">MARSHALL, CARTER &amp; DARK</span> -- Acquire. Sell. Profit.', 'dim');
+      print('', '', '<span style="color:var(--neon-purple)">GLOBAL OCCULT COALITION</span> -- Find. Neutralize. Erase.', 'dim');
+      print('', '', '<span style="color:#00c850">SERPENT\'S HAND</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-- Liberate. Protect. Resist.', 'dim');
+      print('', '', '<span style="color:#4a9eff">UNUSUAL INCIDENTS UNIT</span>  -- Investigate. Classify. Deny.', 'dim');
+      print('', '', '<span style="color:rgba(255,255,255,0.2)">████████████████████</span>&nbsp;&nbsp;&nbsp;-- ████████████████', 'dim', true);
+      printDivider();
+    },
+    rules: () => {
+      printDivider();
+      print('[RULES]', 'ok', 'FOUNDATION SERVER DIRECTIVES -- CONDENSED:', 'ok');
+      print('', '', 'R-001&nbsp;Respect all members in and out of character.', 'dim');
+      print('', '', 'R-002&nbsp;No metagaming. Your character knows only what they have learned IC.', 'dim');
+      print('', '', 'R-003&nbsp;No godmodding. You do not control other characters.', 'dim');
+      print('', '', 'R-004&nbsp;No powerplaying. Characters have realistic limits.', 'dim');
+      print('', '', 'R-005&nbsp;Do not disrupt active RP scenes.', 'dim');
+      print('', '', 'R-006&nbsp;<span style="color:var(--neon-pink)">NO ERP. Zero tolerance.</span>', 'dim');
+      print('', '', 'R-007&nbsp;<span style="color:var(--neon-pink)">No hate speech. Immediate permanent ban.</span>', 'dim');
+      print('', '', 'R-008&nbsp;Follow staff directives. Appeals via appeals channel only.', 'dim');
+      print('', '', 'R-009&nbsp;Respect character death and consequences.', 'dim');
+      print('', '', 'R-010&nbsp;No lore violations without lore team approval.', 'dim');
+      print('[INFO]', 'sys', 'Full directives available at: database.html', 'warn', true);
+      printDivider();
+    },
+    clear: () => {
+      body.innerHTML = '';
+      print('[SYS]', 'sys', 'Terminal cleared.', 'dim', true);
+    },
+    exit: () => {
+      print('[SYS]', 'sys', 'Closing session...', 'warn');
+      setTimeout(() => { window.location.href = 'index.html'; }, 800);
+    }
+  };
+
+  function handleCommand() {
+    const raw = input.value.trim();
+    if (!raw) return;
+    const cmd = raw.toLowerCase();
+    history.unshift(raw);
+    histIdx = -1;
+    input.value = '';
+    echoInput(raw);
+    if (commands[cmd]) {
+      commands[cmd]();
+    } else {
+      print('[ERR]', 'err', 'Unknown command: "' + raw + '" -- Type HELP for available commands.', 'pink', true);
+    }
+  }
+
+  input.focus();
+</script>
+</body>
+</html>
