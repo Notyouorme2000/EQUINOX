@@ -204,204 +204,6 @@
   }
 
   
-  .hero {
-    position: relative;
-    z-index: 1;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 100px 40px 60px;
-  }
-
-  .hero-eyebrow {
-    font-family: 'VT323', monospace;
-    font-size: 1.1rem;
-    color: var(--neon-orange);
-    letter-spacing: 0.5em;
-    text-transform: uppercase;
-    text-shadow: 0 0 10px var(--neon-orange);
-    margin-bottom: 28px;
-    animation: blink-text 4s ease infinite;
-  }
-  @keyframes blink-text {
-    0%,90%,100% { opacity: 1; }
-    95% { opacity: 0.3; }
-  }
-
-  
-  .hero-logo {
-    position: relative;
-    margin-bottom: 20px;
-  }
-
-  .hero-scp {
-    font-family: 'Orbitron', monospace;
-    font-weight: 900;
-    font-size: clamp(5rem, 15vw, 12rem);
-    color: transparent;
-    -webkit-text-stroke: 2px var(--neon-cyan);
-    letter-spacing: 0.15em;
-    line-height: 0.9;
-    text-shadow: none;
-    position: relative;
-    animation: flicker 6s ease infinite;
-  }
-  .hero-scp::before {
-    content: 'SCP';
-    position: absolute;
-    inset: 0;
-    color: var(--neon-cyan);
-    opacity: 0.08;
-    filter: blur(12px);
-    -webkit-text-stroke: 0;
-  }
-
-  @keyframes flicker {
-    0%,95%,100% { opacity: 1; }
-    96% { opacity: 0.6; }
-    97% { opacity: 1; }
-    98% { opacity: 0.4; }
-    99% { opacity: 1; }
-  }
-
-  .hero-divider {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin: 8px 0;
-  }
-  .hero-divider-line {
-    flex: 1;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--neon-pink), transparent);
-    box-shadow: 0 0 8px var(--neon-pink);
-  }
-  .hero-divider-icon {
-    width: 50px;
-    height: 50px;
-    filter: drop-shadow(0 0 12px var(--neon-pink));
-  }
-
-  .hero-equinox {
-    font-family: 'Orbitron', monospace;
-    font-weight: 900;
-    font-size: clamp(1.8rem, 6vw, 5rem);
-    color: var(--neon-pink);
-    letter-spacing: 0.6em;
-    text-transform: uppercase;
-    text-shadow:
-      0 0 20px var(--neon-pink),
-      0 0 60px rgba(255,45,120,0.5);
-    margin-bottom: 40px;
-  }
-
-  .hero-tagline {
-    font-family: 'VT323', monospace;
-    font-size: 1.3rem;
-    color: rgba(255,255,255,0.4);
-    letter-spacing: 0.25em;
-    margin-bottom: 60px;
-    max-width: 600px;
-  }
-  .hero-tagline em {
-    color: var(--neon-cyan);
-    font-style: normal;
-  }
-
-  .hero-cta-group {
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  .btn-primary {
-    background: linear-gradient(135deg, var(--neon-pink), var(--neon-purple));
-    color: #fff;
-    font-family: 'Orbitron', monospace;
-    font-weight: 700;
-    font-size: 0.75rem;
-    letter-spacing: 0.3em;
-    padding: 16px 40px;
-    border: none;
-    cursor: crosshair;
-    text-transform: uppercase;
-    text-decoration: none;
-    display: inline-block;
-    box-shadow: 0 0 30px rgba(255,45,120,0.5), inset 0 1px 0 rgba(255,255,255,0.15);
-    transition: all 0.3s;
-    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
-  }
-  .btn-primary:hover {
-    box-shadow: 0 0 50px rgba(255,45,120,0.8), inset 0 1px 0 rgba(255,255,255,0.2);
-    transform: translateY(-2px);
-  }
-
-  .btn-secondary {
-    background: transparent;
-    color: var(--neon-cyan);
-    font-family: 'Orbitron', monospace;
-    font-weight: 700;
-    font-size: 0.75rem;
-    letter-spacing: 0.3em;
-    padding: 15px 40px;
-    border: 1px solid var(--neon-cyan);
-    cursor: crosshair;
-    text-transform: uppercase;
-    text-decoration: none;
-    display: inline-block;
-    box-shadow: 0 0 15px rgba(0,245,255,0.2), inset 0 0 15px rgba(0,245,255,0.05);
-    transition: all 0.3s;
-    clip-path: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px);
-  }
-  .btn-secondary:hover {
-    background: rgba(0,245,255,0.08);
-    box-shadow: 0 0 30px rgba(0,245,255,0.4), inset 0 0 20px rgba(0,245,255,0.1);
-    transform: translateY(-2px);
-  }
-
-  
-  .ticker {
-    position: relative;
-    z-index: 2;
-    background: rgba(255,45,120,0.1);
-    border-top: 1px solid rgba(255,45,120,0.3);
-    border-bottom: 1px solid rgba(255,45,120,0.3);
-    padding: 10px 0;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-  }
-  .ticker-label {
-    flex-shrink: 0;
-    background: var(--neon-pink);
-    color: #000;
-    font-family: 'Orbitron', monospace;
-    font-weight: 700;
-    font-size: 0.65rem;
-    letter-spacing: 0.2em;
-    padding: 4px 16px;
-    margin-right: 20px;
-  }
-  .ticker-content {
-    display: flex;
-    gap: 80px;
-    animation: ticker-scroll 30s linear infinite;
-    white-space: nowrap;
-    font-size: 0.72rem;
-    color: rgba(255,255,255,0.5);
-    letter-spacing: 0.15em;
-  }
-  .ticker-content span { color: var(--neon-pink); }
-  @keyframes ticker-scroll {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
-  }
-
-  
   .section {
     position: relative;
     z-index: 1;
@@ -437,199 +239,87 @@
     background: linear-gradient(90deg, rgba(0,245,255,0.5), transparent);
   }
 
-  
-  .cards-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 24px;
-  }
+  .page-hero { position: relative; z-index: 1; padding: 160px 48px 80px; max-width: 1200px; margin: 0 auto; }
+  .page-eyebrow { font-family: 'VT323', monospace; font-size: 1rem; color: var(--neon-orange); letter-spacing: 0.4em; text-shadow: 0 0 10px var(--neon-orange); margin-bottom: 16px; }
+  .page-title { font-family: 'Orbitron', monospace; font-weight: 900; font-size: clamp(2.5rem, 7vw, 6rem); color: #fff; letter-spacing: 0.15em; line-height: 1; margin-bottom: 20px; }
+  .page-title span { color: var(--neon-pink); text-shadow: 0 0 30px rgba(255,45,120,0.6); }
+  .page-subtitle { font-size: 0.8rem; color: rgba(255,255,255,0.35); letter-spacing: 0.2em; max-width: 500px; line-height: 1.9; }
+  .page-divider { width: 100%; height: 1px; background: linear-gradient(90deg, var(--neon-cyan), transparent); box-shadow: 0 0 8px var(--neon-cyan); margin: 40px 0; opacity: 0.4; }
+  .nav-logo { text-decoration: none; }
+  .nav-links a.active { color: var(--neon-cyan); text-shadow: 0 0 10px var(--neon-cyan); }
+  .nav-links a.active::after { transform: scaleX(1); background: var(--neon-cyan); box-shadow: 0 0 8px var(--neon-cyan); }
 
-  .card {
+  .redacted { background: rgba(255,255,255,0.07); color: transparent; user-select: none; border-radius: 2px; }
+
+  .faction-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 2px; }
+
+  .faction-card {
     background: rgba(255,255,255,0.02);
-    border: 1px solid rgba(0,245,255,0.12);
-    padding: 36px 30px;
+    border: 1px solid rgba(255,255,255,0.06);
+    padding: 40px 36px;
     position: relative;
     overflow: hidden;
     transition: all 0.3s;
     cursor: crosshair;
   }
-  .card::before {
+  .faction-card::before {
     content: '';
     position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
-    opacity: 0;
-    transition: opacity 0.3s;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    transition: box-shadow 0.3s;
   }
-  .card::after {
-    content: '';
-    position: absolute;
+  .faction-card.foundation::before { background: var(--neon-cyan); }
+  .faction-card.chaos::before { background: var(--neon-pink); }
+  .faction-card.mc::before { background: var(--neon-orange); }
+  .faction-card.goc::before { background: var(--neon-purple); }
+  .faction-card.serpents::before { background: #00c850; }
+  .faction-card.nobody::before { background: rgba(255,255,255,0.3); }
+
+  /* Foundation card — fully visible, highlighted */
+  .faction-card.foundation {
+    border-color: rgba(0,245,255,0.3);
+    box-shadow: 0 0 30px rgba(0,245,255,0.08), inset 0 0 40px rgba(0,245,255,0.03);
+  }
+  .faction-card.foundation:hover {
+    background: rgba(255,255,255,0.04);
+    transform: translateX(4px);
+    border-color: rgba(0,245,255,0.5);
+  }
+
+  /* All non-Foundation cards — blurred and dimmed */
+  .faction-card.blurred {
+    filter: blur(5px) brightness(0.35);
+    pointer-events: none;
+    user-select: none;
+    opacity: 0.6;
+  }
+
+  /* The custom blue UIU card when blurred */
+  .faction-card.blurred-custom {
+    filter: blur(5px) brightness(0.35);
+    pointer-events: none;
+    user-select: none;
+    opacity: 0.6;
+  }
+
+  .faction-name { font-family: 'Orbitron', monospace; font-weight: 900; font-size: 1rem; letter-spacing: 0.15em; color: #fff; margin-bottom: 8px; }
+  .faction-code { font-family: 'VT323', monospace; font-size: 0.85rem; letter-spacing: 0.3em; margin-bottom: 20px; }
+  .faction-desc { font-size: 0.75rem; color: rgba(255,255,255,0.4); line-height: 1.9; letter-spacing: 0.05em; margin-bottom: 24px; }
+  .faction-stats { display: flex; gap: 24px; flex-wrap: wrap; }
+  .fstat { font-size: 0.65rem; letter-spacing: 0.2em; color: rgba(255,255,255,0.25); text-transform: uppercase; }
+  .fstat strong { display: block; font-family: 'VT323', monospace; font-size: 1.4rem; color: rgba(255,255,255,0.6); letter-spacing: 0.1em; }
+
+  
+  .noise {
+    position: fixed;
     inset: 0;
-    background: radial-gradient(circle at 50% 0%, rgba(0,245,255,0.05) 0%, transparent 60%);
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
-  .card:hover { border-color: rgba(0,245,255,0.35); transform: translateY(-4px); box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
-  .card:hover::before, .card:hover::after { opacity: 1; }
-
-  .card-icon {
-    width: 48px;
-    height: 48px;
-    margin-bottom: 20px;
-    filter: drop-shadow(0 0 8px currentColor);
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.025;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
   }
 
-  .card-label {
-    font-family: 'VT323', monospace;
-    font-size: 0.85rem;
-    color: var(--neon-pink);
-    letter-spacing: 0.3em;
-    margin-bottom: 10px;
-  }
-  .card-title {
-    font-family: 'Orbitron', monospace;
-    font-weight: 700;
-    font-size: 0.95rem;
-    color: #fff;
-    letter-spacing: 0.1em;
-    margin-bottom: 14px;
-  }
-  .card-body {
-    font-size: 0.78rem;
-    color: rgba(255,255,255,0.4);
-    line-height: 1.8;
-    letter-spacing: 0.05em;
-  }
-  .card-placeholder {
-    font-family: 'VT323', monospace;
-    color: rgba(255,45,120,0.3);
-    font-size: 0.9rem;
-    letter-spacing: 0.1em;
-    margin-top: 16px;
-    border-top: 1px dashed rgba(255,45,120,0.2);
-    padding-top: 12px;
-  }
-
-  
-  .status-bar {
-    position: relative;
-    z-index: 2;
-    background: rgba(0,0,0,0.6);
-    border-top: 1px solid rgba(0,245,255,0.1);
-    border-bottom: 1px solid rgba(0,245,255,0.1);
-    padding: 24px 48px;
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-    gap: 24px;
-  }
-
-  .stat {
-    text-align: center;
-  }
-  .stat-val {
-    font-family: 'VT323', monospace;
-    font-size: 2.5rem;
-    color: var(--neon-cyan);
-    text-shadow: 0 0 20px var(--neon-cyan);
-    display: block;
-    line-height: 1;
-  }
-  .stat-label {
-    font-size: 0.65rem;
-    letter-spacing: 0.3em;
-    color: rgba(255,255,255,0.35);
-    text-transform: uppercase;
-    margin-top: 4px;
-    display: block;
-  }
-
-  
-  .zones-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2px;
-    margin-top: 8px;
-  }
-  @media (max-width: 700px) {
-    .zones-grid { grid-template-columns: 1fr; }
-    .nav-links { display: none; }
-    nav { padding: 14px 20px; }
-    .hero-equinox { letter-spacing: 0.3em; }
-  }
-
-  .zone {
-    background: rgba(255,255,255,0.02);
-    border: 1px solid rgba(255,255,255,0.05);
-    padding: 28px 24px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    transition: all 0.3s;
-    cursor: crosshair;
-  }
-  .zone:hover { background: rgba(0,245,255,0.04); border-color: rgba(0,245,255,0.2); }
-
-  .zone-class {
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Orbitron', monospace;
-    font-weight: 900;
-    font-size: 0.8rem;
-    flex-shrink: 0;
-  }
-  .zone-class.safe { background: rgba(0,200,80,0.15); border: 2px solid #00c850; color: #00c850; box-shadow: 0 0 12px rgba(0,200,80,0.3); }
-  .zone-class.euclid { background: rgba(255,200,0,0.1); border: 2px solid #ffc800; color: #ffc800; box-shadow: 0 0 12px rgba(255,200,0,0.3); }
-  .zone-class.keter { background: rgba(255,45,120,0.12); border: 2px solid var(--neon-pink); color: var(--neon-pink); box-shadow: 0 0 12px rgba(255,45,120,0.4); }
-
-  .zone-info { flex: 1; }
-  .zone-name {
-    font-family: 'Orbitron', monospace;
-    font-weight: 700;
-    font-size: 0.75rem;
-    letter-spacing: 0.15em;
-    color: #fff;
-    margin-bottom: 4px;
-  }
-  .zone-desc {
-    font-size: 0.7rem;
-    color: rgba(255,255,255,0.35);
-    letter-spacing: 0.05em;
-  }
-
-  
-  footer {
-    position: relative;
-    z-index: 2;
-    border-top: 1px solid rgba(255,255,255,0.06);
-    padding: 40px 48px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 20px;
-  }
-  .footer-logo {
-    font-family: 'Orbitron', monospace;
-    font-weight: 900;
-    font-size: 0.8rem;
-    letter-spacing: 0.3em;
-    color: rgba(255,255,255,0.15);
-  }
-  .footer-note {
-    font-family: 'VT323', monospace;
-    font-size: 0.9rem;
-    color: rgba(255,255,255,0.2);
-    letter-spacing: 0.15em;
-  }
-  .footer-note em { color: var(--neon-pink); font-style: normal; }
-
-  
   .corner-deco {
     position: fixed;
     width: 80px;
@@ -642,64 +332,27 @@
   .corner-deco.bl { bottom: 0; left: 0; border-bottom: 2px solid rgba(0,245,255,0.3); border-left: 2px solid rgba(0,245,255,0.3); }
   .corner-deco.br { bottom: 0; right: 0; border-bottom: 2px solid rgba(0,245,255,0.3); border-right: 2px solid rgba(0,245,255,0.3); }
 
-  
-  .noise {
-    position: fixed;
-    inset: 0;
-    z-index: 1;
-    pointer-events: none;
-    opacity: 0.025;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  footer {
+    position: relative;
+    z-index: 2;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding: 40px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
   }
+  .footer-logo { font-family: 'Orbitron', monospace; font-weight: 900; font-size: 0.8rem; letter-spacing: 0.3em; color: rgba(255,255,255,0.15); }
+  .footer-note { font-family: 'VT323', monospace; font-size: 0.9rem; color: rgba(255,255,255,0.2); letter-spacing: 0.15em; }
+  .footer-note em { color: var(--neon-pink); font-style: normal; }
 
-  .page-hero { position: relative; z-index: 1; padding: 160px 48px 80px; max-width: 1200px; margin: 0 auto; }
-  .page-eyebrow { font-family: 'VT323', monospace; font-size: 1rem; color: var(--neon-orange); letter-spacing: 0.4em; text-shadow: 0 0 10px var(--neon-orange); margin-bottom: 16px; }
-  .page-title { font-family: 'Orbitron', monospace; font-weight: 900; font-size: clamp(2.5rem, 7vw, 6rem); color: #fff; letter-spacing: 0.15em; line-height: 1; margin-bottom: 20px; }
-  .page-title span { color: var(--neon-pink); text-shadow: 0 0 30px rgba(255,45,120,0.6); }
-  .page-subtitle { font-size: 0.8rem; color: rgba(255,255,255,0.35); letter-spacing: 0.2em; max-width: 500px; line-height: 1.9; }
-  .page-divider { width: 100%; height: 1px; background: linear-gradient(90deg, var(--neon-cyan), transparent); box-shadow: 0 0 8px var(--neon-cyan); margin: 40px 0; opacity: 0.4; }
-  .nav-logo { text-decoration: none; }
-  .nav-links a.active { color: var(--neon-cyan); text-shadow: 0 0 10px var(--neon-cyan); }
-  .nav-links a.active::after { transform: scaleX(1); background: var(--neon-cyan); box-shadow: 0 0 8px var(--neon-cyan); }
-  .table-wrap { overflow-x: auto; }
-  table { width: 100%; border-collapse: collapse; font-size: 0.75rem; letter-spacing: 0.08em; }
-  thead tr { border-bottom: 1px solid rgba(0,245,255,0.3); }
-  th { font-family: 'Orbitron', monospace; font-weight: 700; font-size: 0.65rem; letter-spacing: 0.3em; color: var(--neon-cyan); text-transform: uppercase; padding: 14px 20px; text-align: left; }
-  td { padding: 16px 20px; color: rgba(255,255,255,0.5); border-bottom: 1px solid rgba(255,255,255,0.04); vertical-align: middle; }
-  tr:hover td { background: rgba(0,245,255,0.03); color: rgba(255,255,255,0.7); }
-  .badge { display: inline-block; font-family: 'Orbitron', monospace; font-weight: 700; font-size: 0.6rem; letter-spacing: 0.15em; padding: 3px 10px; border-radius: 2px; }
-  .badge.safe { background: rgba(0,200,80,0.15); border: 1px solid #00c850; color: #00c850; }
-  .badge.euclid { background: rgba(255,200,0,0.1); border: 1px solid #ffc800; color: #ffc800; }
-  .badge.keter { background: rgba(255,45,120,0.12); border: 1px solid var(--neon-pink); color: var(--neon-pink); }
-  .badge.thaumiel { background: rgba(191,0,255,0.12); border: 1px solid var(--neon-purple); color: var(--neon-purple); }
-  .badge.neutralized { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.4); }
-  .redacted { background: rgba(255,255,255,0.07); color: transparent; user-select: none; border-radius: 2px; }
-  .faction-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 2px; }
-  .faction-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); padding: 40px 36px; position: relative; overflow: hidden; transition: all 0.3s; cursor: crosshair; }
-  .faction-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; transition: box-shadow 0.3s; }
-  .faction-card.foundation::before { background: var(--neon-cyan); }
-  .faction-card.chaos::before { background: var(--neon-pink); }
-  .faction-card.mc::before { background: var(--neon-orange); }
-  .faction-card.goc::before { background: var(--neon-purple); }
-  .faction-card.serpents::before { background: #00c850; }
-  .faction-card.nobody::before { background: rgba(255,255,255,0.3); }
-  .faction-card:hover { background: rgba(255,255,255,0.04); transform: translateX(4px); }
-  .faction-name { font-family: 'Orbitron', monospace; font-weight: 900; font-size: 1rem; letter-spacing: 0.15em; color: #fff; margin-bottom: 8px; }
-  .faction-code { font-family: 'VT323', monospace; font-size: 0.85rem; letter-spacing: 0.3em; margin-bottom: 20px; }
-  .faction-desc { font-size: 0.75rem; color: rgba(255,255,255,0.4); line-height: 1.9; letter-spacing: 0.05em; margin-bottom: 24px; }
-  .faction-stats { display: flex; gap: 24px; flex-wrap: wrap; }
-  .fstat { font-size: 0.65rem; letter-spacing: 0.2em; color: rgba(255,255,255,0.25); text-transform: uppercase; }
-  .fstat strong { display: block; font-family: 'VT323', monospace; font-size: 1.4rem; color: rgba(255,255,255,0.6); letter-spacing: 0.1em; }
-  .containment-log { display: flex; flex-direction: column; gap: 2px; }
-  .log-entry { display: grid; grid-template-columns: 120px 80px 1fr auto; align-items: center; gap: 20px; padding: 18px 24px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.04); transition: all 0.2s; cursor: crosshair; }
-  .log-entry:hover { background: rgba(0,245,255,0.03); border-color: rgba(0,245,255,0.15); }
-  .log-id { font-family: 'Orbitron', monospace; font-weight: 700; font-size: 0.75rem; color: var(--neon-cyan); letter-spacing: 0.1em; }
-  .log-status { font-family: 'VT323', monospace; font-size: 1rem; letter-spacing: 0.15em; }
-  .log-status.contained { color: #00c850; }
-  .log-status.breach { color: var(--neon-pink); animation: blink-status 1.5s ease infinite; }
-  .log-status.monitoring { color: #ffc800; }
-  @keyframes blink-status { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
-  @media (max-width: 700px) { .page-hero { padding: 130px 24px 60px; } .section { padding: 40px 24px 80px; } .log-entry { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 700px) {
+    .page-hero { padding: 130px 24px 60px; }
+    .section { padding: 40px 24px 80px; }
+    .nav-links { display: none; }
+    nav { padding: 14px 20px; }
+  }
 </style>
 </head>
 <body>
@@ -758,6 +411,8 @@
     <div class="section-line"></div>
   </div>
   <div class="faction-grid">
+
+    <!-- FOUNDATION — visible -->
     <div class="faction-card foundation">
       <div class="faction-name">THE FOUNDATION</div>
       <div class="faction-code" style="color:var(--neon-cyan)">// SECURE &middot; CONTAIN &middot; PROTECT</div>
@@ -768,66 +423,74 @@
         <div class="fstat"><strong>GLOBAL</strong>Reach</div>
       </div>
     </div>
-    <div class="faction-card chaos">
-      <div class="faction-name">CHAOS INSURGENCY</div>
-      <div class="faction-code" style="color:var(--neon-pink)">// ARMED RESISTANCE</div>
-      <div class="faction-desc">Steal. Weaponize. Survive.</div>
+
+    <!-- REDACTED ENTRIES — content stripped, inspect element reveals nothing -->
+    <div class="faction-card chaos blurred">
+      <div class="faction-name">&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;</div>
+      <div class="faction-code">// &#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;</div>
+      <div class="faction-desc">&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;</div>
       <div class="faction-stats">
-        <div class="fstat"><strong>&#x2588;&#x2588;&#x2588;&#x2588;</strong>Operatives</div>
-        <div class="fstat"><strong>HIGH</strong>Threat</div>
-        <div class="fstat"><strong>HOSTILE</strong>Status</div>
+        <div class="fstat"><strong>&#x2588;&#x2588;&#x2588;&#x2588;</strong>&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;</div>
+        <div class="fstat"><strong>&#x2588;&#x2588;&#x2588;&#x2588;</strong>&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;</div>
+        <div class="fstat"><strong>&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;</strong>&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;</div>
       </div>
     </div>
-    <div class="faction-card mc">
-      <div class="faction-name">MARSHALL, CARTER &amp; DARK</div>
-      <div class="faction-code" style="color:var(--neon-orange)">// ANOMALOUS TRADE</div>
-      <div class="faction-desc">Acquire. Sell. Profit.</div>
+
+    <div class="faction-card mc blurred">
+      <div class="faction-name">&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;</div>
+      <div class="faction-code">// &#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;</div>
+      <div class="faction-desc">&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;</div>
       <div class="faction-stats">
-        <div class="fstat"><strong>&#x2588;&#x2588;&#x2588;&#x2588;</strong>Assets</div>
-        <div class="fstat"><strong>MED</strong>Threat</div>
-        <div class="fstat"><strong>NEUTRAL</strong>Status</div>
+        <div class="fstat"><strong>&#x2588;&#x2588;&#x2588;&#x2588;</strong>&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;</div>
+        <div class="fstat"><strong>&#x2588;&#x2588;&#x2588;</strong>&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;</div>
+        <div class="fstat"><strong>&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;</strong>&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;</div>
       </div>
     </div>
-    <div class="faction-card goc">
-      <div class="faction-name">GLOBAL OCCULT COALITION</div>
-      <div class="faction-code" style="color:var(--neon-purple)">// DESTROY &middot; NOT CONTAIN</div>
-      <div class="faction-desc">Find. Neutralize. Erase.</div>
+
+    <div class="faction-card goc blurred">
+      <div class="faction-name">&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;</div>
+      <div class="faction-code">// &#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;</div>
+      <div class="faction-desc">&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;</div>
       <div class="faction-stats">
-        <div class="fstat"><strong>&#x2588;&#x2588;&#x2588;&#x2588;</strong>Agents</div>
-        <div class="fstat"><strong>HIGH</strong>Threat</div>
-        <div class="fstat"><strong>RIVAL</strong>Status</div>
+        <div class="fstat"><strong>&#x2588;&#x2588;&#x2588;&#x2588;</strong>&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;</div>
+        <div class="fstat"><strong>&#x2588;&#x2588;&#x2588;&#x2588;</strong>&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;</div>
+        <div class="fstat"><strong>&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;</strong>&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;</div>
       </div>
     </div>
-    <div class="faction-card serpents">
-      <div class="faction-name">SERPENT'S HAND</div>
-      <div class="faction-code" style="color:#00c850">// LIBERATION FRONT</div>
-      <div class="faction-desc">Liberate. Protect. Resist.</div>
+
+    <div class="faction-card serpents blurred">
+      <div class="faction-name">&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;</div>
+      <div class="faction-code">// &#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;</div>
+      <div class="faction-desc">&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;</div>
       <div class="faction-stats">
-        <div class="fstat"><strong>&#x2588;&#x2588;&#x2588;&#x2588;</strong>Members</div>
-        <div class="fstat"><strong>MED</strong>Threat</div>
-        <div class="fstat"><strong>HOSTILE</strong>Status</div>
+        <div class="fstat"><strong>&#x2588;&#x2588;&#x2588;&#x2588;</strong>&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;</div>
+        <div class="fstat"><strong>&#x2588;&#x2588;&#x2588;</strong>&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;</div>
+        <div class="fstat"><strong>&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;</strong>&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;</div>
       </div>
     </div>
-    <div class="faction-card" style="--accent:#4a9eff;border-color:rgba(74,158,255,0.15);">
-      <div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:#4a9eff;"></div>
-      <div class="faction-name">UNUSUAL INCIDENTS UNIT</div>
-      <div class="faction-code" style="color:#4a9eff">// FEDERAL INVESTIGATION</div>
-      <div class="faction-desc">Investigate. Classify. Deny.</div>
+
+    <div class="faction-card blurred-custom">
+      <div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:rgba(255,255,255,0.2);"></div>
+      <div class="faction-name">&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;</div>
+      <div class="faction-code">// &#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;</div>
+      <div class="faction-desc">&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;</div>
       <div class="faction-stats">
-        <div class="fstat"><strong>&#x2588;&#x2588;&#x2588;&#x2588;</strong>Agents</div>
-        <div class="fstat"><strong>LOW</strong>Threat</div>
-        <div class="fstat"><strong>NEUTRAL</strong>Status</div>
+        <div class="fstat"><strong>&#x2588;&#x2588;&#x2588;&#x2588;</strong>&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;</div>
+        <div class="fstat"><strong>&#x2588;&#x2588;&#x2588;</strong>&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;</div>
+        <div class="fstat"><strong>&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;</strong>&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;</div>
       </div>
     </div>
-    <div class="faction-card nobody">
-      <div class="faction-name"><span class="redacted">&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;</span></div>
-      <div class="faction-code" style="color:rgba(255,255,255,0.2)">// &#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;</div>
-      <div class="faction-desc"><span class="redacted">&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;</span></div>
+
+    <div class="faction-card nobody blurred">
+      <div class="faction-name">&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;</div>
+      <div class="faction-code">// &#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;</div>
+      <div class="faction-desc">&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;</div>
       <div class="faction-stats">
-        <div class="fstat"><strong><span class="redacted">&#x2588;&#x2588;&#x2588;&#x2588;</span></strong>&#x2588;&#x2588;&#x2588;&#x2588;</div>
+        <div class="fstat"><strong>&#x2588;&#x2588;&#x2588;&#x2588;</strong>&#x2588;&#x2588;&#x2588;&#x2588;</div>
         <div class="fstat"><strong>&#x2588;&#x2588;&#x2588;&#x2588;</strong>&#x2588;&#x2588;&#x2588;&#x2588;</div>
       </div>
     </div>
+
   </div>
 </div>
 
